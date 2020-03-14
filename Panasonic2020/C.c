@@ -11,12 +11,14 @@ int	main(void)
 	{
 		printf("Yes");
 	}
-	else if (sqrt(a) + sqrt(b) < sqrt(c))
+	else if (sqrtl(a) + sqrtl(b) < sqrtl(c))
 	{
 		printf("Yes");
 	}
-	else if (pow(a,2) + pow(b,2) + 2*sqrtl(a*b) < pow(a+b,2))
-		printf("Yes");
+	else if (a + b + 2*sqrtl(a*b) < a+b)
+		{
+			printf("Yes");
+		}
 	else
 		printf("No");
 
