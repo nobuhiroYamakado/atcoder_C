@@ -6,11 +6,15 @@ int main(void)
     long long int h, w;
 
     scanf("%lld %lld", &h, &w);
-    if (h%2 == 1 && w%2 ==1)
+	if (h == 1 || w ==1)
+	{
+		h = 1;
+	}
+	else if (h%2 == 1 && w%2 ==1)
 	{
 		h = ((h * w) / 2) + 1;
 	}
-	else 
+	else
 	{
 		h = (h * w)/2;
 	}
