@@ -7,11 +7,11 @@ int	main(void)
 
 	scanf("%lld %lld %lld", &a, &b, &c);
 
-	if ((a+b)*2 <= c)
+	if ((a+b)*2 < c)
 	{
 		printf("Yes");
 	}
-	else if (sqrt(a) + sqrt(b) < sqrt(c))
+	else if (sqrtl(a) + sqrtl(b) < sqrtl(c))
 	{
 		printf("Yes");
 	}
