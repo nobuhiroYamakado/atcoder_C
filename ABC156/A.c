@@ -4,7 +4,7 @@ int	main(void)
 {
 	int N, R;
 	scanf("%d %d", &N, &R);
-	if(N>=20)
+	if(N>=10)
 	{
 		printf("%d\n",R);
 		return(0);
