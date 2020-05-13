@@ -1,119 +1,93 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <stdbool.h>
-
-#define lli long long int
 
 #define MAX(a,b) ((a>b)?(a):(b))
 
-
-void char_append(char *s, char c)
-{
-	int i = 0;
-	while (s[i] != '\0')
-	{
-		i++;
-	}
-	s[i] = c;
-	s[i+1] = '\0';
-}
-
-bool is_char_in_str(char *str, char c)
-{
-	int i = 0;
-	while (str[i] != '\0')
-	{
-		if (str[i] == c)
-			return (true);
-		i++;
-	}
-	return (false);
-}
-char *ignore_str(char *str, char *sub_str)
-{
-	int i = 0;
-	int j = 0;
-	while (sub_str[i] != '\0')
-	{
-		while (str[j]!= sub_str[i])
-				j++;
-		i++;
-		j++;
-	}
-	return(&(str[j]));
-}
-
-int	main(void)
+int main()
 {
 	char s[3002];
 	char t[3002];
-	
 	scanf("%s",s);
 	scanf("%s",t);
-	lli len_s = strlen(s);
-	lli len_t = strlen(t);
-	lli len = MAX(len_s,len_t);
-	//printf("strlen_s:%lld, t:%lld\n",len_s, len_t);
-
-	char dp[len+1][3002];
-
-	lli i, j;
-	lli index = 0;
-	while (index < len + 1)
+	int len_s = strlen(s);
+	int len_t = strlen(t);
+	
+	int **dp;
+	dp = (int **)malloc(3002*sizeof(int*));
+	int index = 0;
+	while (index < 3002)
 	{
-		dp[0][0] = '\0';
+		dp[index] = (int *)malloc(3002*sizeof(int));
 		index++;
 	}
-	index = len_s;
-	while (index <= len)
+	int i, j;
+	index = 0;
+	//printf("debug1001\n");
+	while (index < 3002)
 	{
-		s[index] = '\0';
+		dp[0][index] = 0;
+		dp[index][0] = 0;
 		index++;
 	}
-	index = len_t;
-	while (index <= len)
-	{
-		t[index] = '\0';
-		index++;
-	}
-
+	//printf("debug0001\n");
 	i = 1;
-	char short_s[3002];
-	char short_t[3002];
-	while (i <= len)
+	j = 1;
+	//printf("debug0001\n");
+	
+	while (i <= len_s)
 	{
-		strcpy(dp[i],dp[i-1]);
-		strcpy(short_s,s);
-		strcpy(short_t,t);
-		short_s[i-1] = '\0';
-		short_t[i-1] = '\0';
-		//printf("short_s;%s,t:%s\n",short_s,short_t);
-		if(s[i-1] == t[i-1])
+		j = 1;
+		while( j <= len_t)
 		{
-			char_append(dp[i],s[i-1]);
-			//printf("EQ, i:%lld,dp:%s\n",i,dp[i]);
-		}
-		else if(is_char_in_str(ignore_str(short_s,dp[i-1]),t[i-1]) == true)
-		{
-			//printf("ig_str:%s\n",ignore_str(short_s,dp[i-1]));
-			//printf("short_s:%s,dp[i];%s,t[i-1]:%c\n",short_s,dp[i],t[i-1]);
-			char_append(dp[i],t[i-1]);
-			//printf("tEQ, i:%lld,dp:%s\n",i,dp[i]);
-		}
-		else if(is_char_in_str(ignore_str(short_t,dp[i-1]),s[i-1]) == true)
-		{
-			char_append(dp[i],s[i-1]);
-			//printf("sEQ, i:%lld,dp:%s\n",i,dp[i]);
-		}
-		else
-		{
-			//printf("nEQ, i:%lld,dp:%s\n",i,dp[i]);
+			if(s[i-1] == t[j-1])
+			{
+				dp[i][j] = dp[i-1][j-1]+1;
+				//printf("debug0002,dp;%d, i;%d,j;%d\n",dp[i][j],i,j);
+			}
+			else
+			{
+				dp[i][j] = MAX(dp[i-1][j],dp[i][j-1]);
+				//printf("debug0003, dp;%d,i;%d,j;%d\n",dp[i][j],i,j);
+			}
+			j++;
 		}
 		i++;
 	}
-	//printf("debug0009\n");
-	printf("%s\n",dp[len]);
+	char ans[3002];
+	//printf("after ans def\n");
+	index = 0;
+	while (index < 3002)
+	{
+		ans[index] = '\0';
+		//printf("%d\n",index);
+
+		index++;
+	}
+	//printf("before len def\n");
+	int len = dp[len_s][len_t];
+	i = len_s;
+	j = len_t;
+	//printf("before ans while loop\n");
+	while (len > 0)
+	{
+		if(s[i-1] == t[j-1])
+		{
+			ans[len-1] = s[i-1];
+			i--;
+			j--;
+			len--;
+		}
+		else if(dp[i][j] == dp[i-1][j])
+		{
+			i--;
+		}
+		else
+		{
+			j--;
+		}
+	}
+	//printf("just before answer debug0001\n");
+	printf("%s\n",ans);
 	return (0);
 }
