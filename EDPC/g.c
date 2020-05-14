@@ -3,67 +3,106 @@
 #include <string.h>
 #include <unistd.h>
 
-#define lli long long int
 
 #define MAX(a,b) (((a)>(b))?(a):(b))
 
 typedef struct s_path
 {
-	lli start;
-	lli end;
-	lli len;
+	int start;
+	int end;
+	int len;
 } t_path;
+
+typedef struct s_vert
+{
+	int name;
+	int *list;
+	int num;
+} t_vert;
+
+int len_of_vert(int i, t_vert *vs)
+{
+	if (vs[i].num == 0)
+		return (0);
+	
+	int max = 0;
+	int tmp = 0;
+	int index = 0;
+	while (index < vs[i].num)
+	{
+		tmp = len_of_vert(vs[i].list[index], vs);
+		if (max < tmp)
+			max = tmp;
+		index++;
+	}
+	return (max + 1);
+}
 
 int main(void)
 {
-	lli n, m;
+	int n, m;
 
-	scanf ("%lld %lld",&n, &m);
+	scanf ("%d %d",&n, &m);
+	t_vert vs[n+1];
+	int x[m],y[m];
+	int index = 0;
 
-	lli x[m],y[m];
-	t_path list[m];
-	lli index = 0;
-	while (index < m)
+	while (index < n + 1)
 	{
-		scanf("%lld %lld",&(x[index]),&(y[index]));
-		list[index].start = x[index];
-		list[index].end = y[index];
-		list[index].len = 1;
+		vs[index].num = 0;
 		index++;
 	}
-	lli dp[n+1][n+1];
-	lli i = 0;
-	lli j = 0;
-	while (i <= n)
+	index = 0;
+	while (index < m)
 	{
-		j = 0;
-		while (j <= n)
+		scanf("%d %d",&(x[index]),&(y[index]));
+		vs[x[index]].num = vs[x[index]].num + 1;
+		index++;
+	}
+	index = 0;
+	while (index < n+1)
+	{
+		vs[index].list = (int *)malloc(sizeof(int)*(vs[index].num));
+		index++;
+	}
+	int i = 0;
+	int j = 0;
+	int k[n+1];
+	while (j < n+1)
+	{
+		k[j] = 0;
+		j++;
+	}
+	//printf("AAA\n");
+	i = 0;
+	while (i < m)
+	{
+		//printf("i:%d\n",i);
+		//printf("x[i];%d\n",x[i]);
+		//printf("k[x[i]];%d\n",k[x[i]]);
+		//printf("vs[x[i]].num;%d\n",vs[x[i]].num);
+		if (vs[x[i]].num > k[x[i]])
 		{
-			dp[i][j] = 0;
-			j++;
+			vs[x[i]].list[k[x[i]]] = y[i];
+			k[x[i]] = k[x[i]] + 1;
 		}
 		i++;
 	}
-	lli max = 0;
-	lli p_max = 0;
+	//printf("BBB\n");
 	i = 1;
-	while (i <= m)
+	j = 0;
+	int dp[n+1];
+	dp[0] = 0;
+	int max = 0;
+	int p_len = 0;
+	i = 0;
+	while (i < n+1)
 	{
-		if (dp[x[i-1]][y[i-1]] == 0)
-			dp[x[i-1]][y[i-1]] = 1;
-		j = 1;
-		while (j <= n)
-		{
-			if(dp[j][x[i-1]] != 0)
-				dp[j][x[i-1]]++;
-			if(dp[y[i-1]][j] != 0)
-				dp[y[i-1]][j]++;
-			p_max = MAX(dp[j][x[i-1]],dp[y[i-1]][j]);
-			max = MAX(p_max, max);
-			j++;
-		}
+		p_len = len_of_vert(i, vs);
+		max = MAX(p_len,max);
+		//printf("i;%d\n",i);
 		i++;
 	}
-	printf("%lld\n",max);
+	printf("%d\n",max);
 	return (0);
 }
