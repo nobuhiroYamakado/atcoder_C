@@ -20,21 +20,26 @@ typedef struct s_vert
 	int num;
 } t_vert;
 
-int len_of_vert(int i, t_vert *vs)
+int len_of_vert(int i, t_vert *vs, int *flag, int *dp)
 {
 	if (vs[i].num == 0)
 		return (0);
-	
+	if(flag[i] != 0)
+	{
+		return (dp[i]);
+	}
+	flag[i] = 1;
 	int max = 0;
 	int tmp = 0;
 	int index = 0;
 	while (index < vs[i].num)
 	{
-		tmp = len_of_vert(vs[i].list[index], vs);
+		tmp = len_of_vert(vs[i].list[index], vs, flag, dp);
 		if (max < tmp)
 			max = tmp;
 		index++;
 	}
+	dp[i] = max + 1;
 	return (max + 1);
 }
 
@@ -46,10 +51,13 @@ int main(void)
 	t_vert vs[n+1];
 	int x[m],y[m];
 	int index = 0;
-
+	int flag[n+1];
+	int dp[n+1];
 	while (index < n + 1)
 	{
 		vs[index].num = 0;
+		flag[index] = 0;
+		dp[index] = 0;
 		index++;
 	}
 	index = 0;
@@ -91,14 +99,12 @@ int main(void)
 	//printf("BBB\n");
 	i = 1;
 	j = 0;
-	int dp[n+1];
-	dp[0] = 0;
 	int max = 0;
 	int p_len = 0;
 	i = 0;
 	while (i < n+1)
 	{
-		p_len = len_of_vert(i, vs);
+		p_len = len_of_vert(i, vs, flag, dp);
 		max = MAX(p_len,max);
 		//printf("i;%d\n",i);
 		i++;
