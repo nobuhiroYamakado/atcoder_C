@@ -13,6 +13,7 @@ typedef struct s_path
 	lli end;
 	lli len;
 } t_path;
+
 int main(void)
 {
 	lli n, m;
@@ -30,71 +31,39 @@ int main(void)
 		list[index].len = 1;
 		index++;
 	}
-	lli dp[m+1];
-	lli i = 2;
+	lli dp[n+1][n+1];
+	lli i = 0;
 	lli j = 0;
-	dp[0] = 0;
-	dp[1] = 1;
-	index = 2;
-	while (index <= m)
-	{
-		dp[index] = 0;
-		index++;
-	}
-	while (i <= m)
+	while (i <= n)
 	{
 		j = 0;
-		while (j < i)
+		while (j <= n)
 		{
-			//printf("list_s;%lld, e;%lld, i;%lld, j;%lld\n",list[j].start,list[j].end,i,j);
-			if ((list[j].start == list[i-1].end)
-					&&(list[j].len == dp[i-1]))
-			{
-				dp[i] = dp[i-1] + 1;
-				list[j].start = list[i-1].start;
-				list[j].len++;
-				//printf("case1, i;%lld, j;%lld, dp[i];%lld\n",i,j,dp[i]);
-			}
-			else if ((list[j].end == list[i-1].start)
-					&&(list[j].len == dp[i-1]))
-			{
-				dp[i] = dp[i-1] + 1;
-				list[j].end = list[i-1].end;
-				list[j].len++;
-				//printf("case2, i;%lld, j;%lld, dp[i];%lld\n",i,j,dp[i]);
-			}
-			else if (list[j].end == list[i-1].start)
-			{
-				list[j].end = list[i-1].end;
-				list[j].len++;
-				dp[i] = MAX(dp[i-1],dp[i]);
-				//printf("case3, i;%lld, j;%lld, dp[i];%lld\n",i,j,dp[i]);
-			}
-			else if (list[j].end == list[i-1].start)
-			{
-				list[j].end = list[i-1].end;
-				list[j].len++;
-				dp[i] = MAX(dp[i-1],dp[i]);
-				//printf("case4, i;%lld, j;%lld, dp[i];%lld\n",i,j,dp[i]);
-			}
-			else
-			{
-				dp[i] = MAX(dp[i-1],dp[i]);
-				//printf("case5, i;%lld, j;%lld, dp[i];%lld\n",i,j,dp[i]);
-			}
+			dp[i][j] = 0;
 			j++;
 		}
 		i++;
 	}
-	index = 0;
-	while (index < m)
+	lli max = 0;
+	lli p_max = 0;
+	i = 1;
+	while (i <= m)
 	{
-		if (dp[i-1] == list[index].len)
+		if (dp[x[i-1]][y[i-1]] == 0)
+			dp[x[i-1]][y[i-1]] = 1;
+		j = 1;
+		while (j <= n)
 		{
-			printf("%lld\n",dp[i-1]);
-			return (0);
+			if(dp[j][x[i-1]] != 0)
+				dp[j][x[i-1]]++;
+			if(dp[y[i-1]][j] != 0)
+				dp[y[i-1]][j]++;
+			p_max = MAX(dp[j][x[i-1]],dp[y[i-1]][j]);
+			max = MAX(p_max, max);
+			j++;
 		}
-		index++;
+		i++;
 	}
+	printf("%lld\n",max);
 	return (0);
 }
