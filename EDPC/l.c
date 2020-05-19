@@ -23,7 +23,22 @@ int main(void)
 		scanf("%lld",&(a[i]));
 		i++;
 	}
-	lli dp[301][301] = {0};
+	lli **dp;
+	i = 0;
+	j = 0;
+	dp = (lli **)malloc(sizeof(lli *)*(n + 1));
+	while (i <= n)
+	{
+		dp[i] = (lli *)malloc(sizeof(lli)*(n+1));
+		j = 0;
+		while (j <= n)
+		{
+			dp[i][j] = 0;
+			j++;
+		}
+		i++;
+	}
+
 	i =1;
 	j =0;
 	k =0;
