@@ -1,0 +1,13 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include <ctype.h>
+#include <unistd.h>
+
+#define lli long long int
+
+int main(void)
+{
+	return (0);
+}
